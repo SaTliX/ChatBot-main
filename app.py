@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY')
 
 # Clé API Yelp (remplacez par votre propre clé)
-YELP_API_KEY = 'BcSHFc8ge0xDAAHuYn15yya5_jige6_--nH6ilI3nWD-cMHfXBTCclQyWQHWtNfYsBfVy5qGKlRxeGfUilFv71688tMrnLm8jk1eyFCUtaOkDPJyjA8-X2To5zAUZnYx'
+YELP_API_KEY = 'API KEY'
 
 # Endpoint pour la page d'accueil
 @app.route("/")
