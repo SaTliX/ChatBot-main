@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+			background-color: #575555;
+        }
+        #chat-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            border: 1px solid #060000;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        #chat-box {
+            padding: 20px;
+            height: 400px;
+            overflow-y: auto;
+        }
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .user {
+            background-color: #ffffff;
+            align-self: flex-end;
+        }
+        .bot {
+            background-color: #d9edf7;
+        }
+        #chat-form {
+            display: flex;
+            padding: 20px;
+            border-top: 1px solid #000000;
+        }
+        #user-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #chat-form button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <div id="chat-box"></div>
+        <form id="chat-form">
+            <input type="text" id="user-input" placeholder="Votre message...">
+            <button type="submit">Envoyer</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatBox = document.getElementById('chat-box');
+            const chatForm = document.getElementById('chat-form');
+            const userInput = document.getElementById('user-input');
+
+            // Fonction pour ajouter un message au chat
+            function addMessage(message, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}`;
+                messageDiv.textContent = message;
+                chatBox.appendChild(messageDiv);
+                chatBox.scrollTop = chatBox.scrollHeight; // Fait défiler vers le bas automatiquement
+            }
+
+            // Événement de soumission du formulaire
+            chatForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const userMessage = userInput.value.trim();
+                if (userMessage !== '') {
+                    addMessage(userMessage, 'user');
+                    userInput.value = ''; // Efface le champ de saisie
+                    sendMessage(userMessage);
+                }
+            });
+
+            // Fonction pour envoyer le message à l'API
+            async function sendMessage(message) {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: message })
+                });
+                const data = await response.json();
+                addMessage(data.message, 'bot');
+            }
+
+            // Message de bienvenue initial
+            addMessage('Bonjour dans quelle ville souhaiteriez-vous un restaurant ?', 'bot');
+        });
+    </script>
+</body>
+</html>
